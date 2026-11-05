@@ -1,770 +1,293 @@
-<!doctype html>
-<html lang="ar">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Dana Alanazi portfolio: projects, achievements, and skills.">
-<style>:root{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>Dana Alanazi Portfolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Lalezar&family=Readex+Pro:wght@300;400;500;600&display=swap">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DockerUpdates - Self-Hosted Docker Dashboard to Manage, Update and Monitor Containers</title>
+<meta name="description" content="DockerUpdates is a self-hosted Docker dashboard to manage, update and monitor your containers. Scheduled auto-updates with cooldown, Discord, Telegram and ntfy notifications, health alerts, live logs and console, update history and an easy container editor.">
+<meta name="keywords" content="auto-update, auto-updater, container-management, discord-notifications, docker, docker-dashboard, docker-gui, docker-management, docker-management-tool, docker-updates, homelab, nodejs, react, self-hosted, tailwindcss, telegram-notification-center, typescript, docker dashboard windows, docker auto update tool">
+<meta name="author" content="DockerUpdates">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://github.com/oaht9412/DockerUpdates">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DockerUpdates">
+<meta property="og:title" content="DockerUpdates - Self-Hosted Docker Dashboard to Manage, Update and Monitor Containers">
+<meta property="og:description" content="Manage, update and monitor your Docker containers from one friendly dashboard. Scheduled auto-updates, health alerts, live logs, update history and Discord, Telegram or ntfy notifications.">
+<meta property="og:url" content="https://github.com/oaht9412/DockerUpdates">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DockerUpdates - Self-Hosted Docker Dashboard">
+<meta name="twitter:description" content="Manage, update and monitor your Docker containers from one friendly dashboard. Scheduled auto-updates, health alerts, live logs and notifications.">
+<meta name="theme-color" content="#0f172a">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "DockerUpdates",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Windows, Linux, macOS",
+  "description": "Self-hosted Docker dashboard to manage, update and monitor your containers. Scheduled auto-updates with cooldown, Discord/Telegram/ntfy notifications, health alerts, live logs and console, update history and an easy container editor.",
+  "url": "https://github.com/oaht9412/DockerUpdates",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
 <style>
-/* Layout: a midnight sky. Her name is drawn as a constellation, wins shine as a row of big results, and the two lead projects are solid blocks of colour against the night. */
-:root {
-  color-scheme: dark;
-  --night: #0F1A2E; --deep: #1A2840; --star: #F3F5F9; --haze: #B3BFD3; --line: #2E3E5A;
-  --pink: #93B7E4; --gold: #D2B06A; --aqua: #8CC9C9;
-  --display: "Lalezar", "Readex Pro", Tahoma, sans-serif;
-  --body: "Readex Pro", "Segoe UI", Tahoma, sans-serif;
-  --mono: "IBM Plex Mono", "Courier New", monospace;
-}
-body { background: var(--night); color: var(--star); font-family: var(--body); font-weight: 300; font-size: 16px; line-height: 1.75;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
-#aurora { position: fixed; inset: -12%; pointer-events: none; z-index: 0; background: radial-gradient(45% 45% at 82% 14%, rgba(169,139,255,.22), transparent 70%), radial-gradient(45% 50% at 12% 52%, rgba(53,224,210,.13), transparent 70%), radial-gradient(45% 45% at 72% 90%, rgba(255,127,176,.14), transparent 70%); }
-#sky { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-#app { position: relative; z-index: 1; max-width: 1080px; margin-inline: auto; display: grid; gap: 80px; }
-#app[data-lang="ar"] .e, #app[data-lang="en"] .a { display: none; }
-a { color: inherit; text-underline-offset: 3px; }
-:focus-visible { outline: 2px solid var(--aqua); outline-offset: 3px; }
-h1, h2, h3, p, ul, ol { margin: 0; padding: 0; }
-ul, ol { list-style: none; }
-b { font-weight: 500; }
-h1, h2, h3 { font-family: var(--display); font-weight: 400; text-wrap: balance; line-height: 1.2; }
-h2 { font-size: 2.5rem; color: var(--gold); }
-.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
-.label { font-size: .875rem; color: var(--haze); }
-
-.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 20px; flex-wrap: wrap; margin-bottom: -56px; }
-.top nav { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
-.top nav a { text-decoration: none; color: var(--haze); font-size: .9375rem; }
-.top nav a:hover { color: var(--aqua); }
-.brand { font-family: var(--display); font-size: clamp(1.875rem, 4vw, 2.75rem); line-height: 1.2; color: var(--gold); }
-button { font: inherit; font-weight: 500; color: var(--night); background: var(--aqua); border: 0; border-radius: 999px; padding: 4px 16px; cursor: pointer; }
-button:hover { background: var(--star); }
-
-.hero { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 40px; align-items: center; }
-.hero > div { min-width: 0; display: grid; gap: 20px; }
-.hero h1 { font-size: clamp(2.75rem, 7vw, 5rem); line-height: 1.1; }
-.hero h1 em { font-style: normal; color: var(--gold); background: linear-gradient(100deg, var(--gold), var(--pink), var(--gold)); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.orbitbar { position: fixed; top: env(safe-area-inset-top, 0px); inset-inline-start: 0; height: 2px; width: 0; background: var(--gold); z-index: 5; }
-.orbitbar::after { content: ""; position: absolute; top: -3px; inset-inline-end: -4px; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 12px var(--gold); }
-.wins li { transition: transform .3s ease; }
-.log li { transition: background-color .25s ease; }
-.log li:hover { background: rgba(147, 183, 228, .07); }
-.top nav a { position: relative; }
-.top nav a::after { content: ""; position: absolute; inset-inline: 0; bottom: -3px; height: 1px; background: var(--aqua); transform: scaleX(0); transition: transform .25s ease; }
-.top nav a:hover::after { transform: scaleX(1); }
-.rise { opacity: .15; transform: translateY(24px); }
-.go { transition: opacity .7s ease, transform .7s ease; }
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes sweep { to { background-position: -220% 0; } }
-}
-.who { font-size: 1.125rem; color: var(--aqua); font-weight: 500; }
-.lede { max-width: 56ch; font-size: 1.0625rem; }
-.coop { color: var(--haze); font-size: .9375rem; }
-.coop b { color: var(--star); }
-.motto { position: relative; display: grid !important; place-items: center; min-height: 300px; }
-.motto svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.motto ellipse { fill: none; stroke: var(--line); }
-.motto circle { fill: var(--gold); }
-.motto circle.alt { fill: var(--aqua); }
-.motto .sat rect { fill: var(--pink); }
-.motto p { position: relative; text-align: center; font-family: var(--display); font-size: clamp(2.5rem, 5vw, 3.75rem); line-height: 1.15; color: var(--gold); max-width: 8.5em; text-wrap: balance; }
-
-.wins { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: -32px; }
-.wins li { display: grid; gap: 2px; align-content: start; padding: 16px 0 0; border-top: 3px solid var(--c); min-width: 0; }
-.wins strong { font-family: var(--display); font-weight: 400; font-size: 2rem; line-height: 1.2; color: var(--c); }
-
-section { display: grid; gap: 28px; }
-.stack { display: grid; gap: 20px; }
-.project { --ink: var(--star); background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 36px; transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); gap: 16px 48px; }
-.project.gold { --bg: rgba(20, 58, 70, .78); }
-.project:hover { border-color: var(--gold); }
-.project.pink { --bg: rgba(58, 36, 72, .78); }
-.project > div { min-width: 0; display: grid; gap: 12px; align-content: start; }
-.project h3 { font-size: 2.75rem; }
-.project p, .project li { font-weight: 400; }
-.tags { display: grid; gap: 2px; }
-.tags li { font-weight: 500 !important; }
-.tags li::before { content: "★ "; color: var(--gold); }
-.meta { font-size: .875rem; }
-
-.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 8px; }
-.flow li { position: relative; padding-top: 14px; padding-inline-end: 12px; display: grid; gap: 2px; align-content: start; min-width: 0; border-top: 2px solid var(--ink); }
-.flow li::before { content: ""; position: absolute; top: -7px; inset-inline-start: 0; width: 12px; height: 12px; background: var(--bg); border: 2px solid var(--ink); border-radius: 50%; }
-.flow li.key::before { background: var(--ink); }
-.flow b { font-weight: 600; line-height: 1.4; }
-.flow span { font-size: .875rem; line-height: 1.5; }
-
-.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--ink); }
-.facts div { min-width: 0; display: grid; align-content: start; }
-.facts strong { font-family: var(--display); font-weight: 400; font-size: 1.75rem; line-height: 1.2; }
-.facts span { font-size: .8125rem; line-height: 1.5; }
-.stage { font-size: .875rem; }
-.stage a { font-weight: 500; }
-.shot { width: 100%; max-width: 100%; height: auto; display: block; border-radius: 6px; margin-top: 4px; }
-@media (max-width: 560px) { .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.stage3d { color: var(--star); padding: 0; display: grid; gap: 6px; }
-.stage3d canvas { width: 100%; aspect-ratio: 5 / 4; display: block; cursor: grab; touch-action: pan-y; }
-.stage3d canvas:active { cursor: grabbing; }
-.stage3d label, .stage3d p { font-size: .8125rem; font-weight: 400; color: var(--haze); }
-.stage3d label { display: grid; gap: 2px; }
-.stage3d input { width: 100%; accent-color: var(--gold); margin: 0; }
-.others { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; padding-top: 12px; }
-.others li { display: grid; gap: 2px; align-content: start; }
-
-.log li { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 4px 24px; padding-block: 12px; border-top: 1px solid var(--line); align-items: baseline; }
-.log time, .log .nd { font-size: .875rem; color: var(--haze); }
-.log p { min-width: 0; }
-.log small { display: block; font-size: .875rem; color: var(--haze); }
-.chip { font-size: .8125rem; font-weight: 500; border-radius: 999px; padding: 1px 12px; white-space: nowrap; background: var(--deep); color: var(--haze); }
-.chip.hot { background: var(--gold); color: var(--night); }
-
-.skills { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
-.skills div { display: grid; gap: 8px; align-content: start; min-width: 0; }
-.skills h3, .two h3 { font-size: 1.375rem; color: var(--aqua); }
-
-.two { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 48px; }
-.two > div { display: grid; gap: 16px; align-content: start; min-width: 0; }
-.list li { padding-block: 8px; border-top: 1px solid var(--line); }
-.list small { display: block; color: var(--haze); font-size: .875rem; }
-
-.contact { background: var(--gold); color: #0F1A2E; padding: 36px; display: grid; gap: 12px; }
-.contact h2 { color: inherit; }
-.contact p { font-weight: 400; }
-.contact .row { display: flex; gap: 12px 32px; flex-wrap: wrap; align-items: center; }
-.contact .addr { overflow-wrap: anywhere; user-select: all; min-width: 0; font-weight: 500; }
-.contact a { font-weight: 500; }
-.contact button { background: #0F1A2E; color: var(--star); }
-.contact .cv { background: #0F1A2E; color: var(--star); padding: 4px 16px; border-radius: 999px; text-decoration: none; }
-.contact .cv:hover { background: var(--star); color: #0F1A2E; }
-.contact button:hover { background: var(--star); color: #0F1A2E; }
-
-:root { --violet: #A98BFF; --coral: #FF8F7A; --rose: #FF7FB0; --ok: #6FE3A5; }
-h2 { background: linear-gradient(95deg, var(--c1, var(--gold)), var(--c2, var(--coral))); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; justify-self: start; }
-#projects { --c1: var(--gold); --c2: var(--coral); }
-#log { --c1: var(--aqua); --c2: var(--pink); }
-#skills { --c1: var(--violet); --c2: var(--aqua); }
-.two > div:first-child { --c1: var(--rose); --c2: var(--gold); }
-.two > div:last-child { --c1: var(--aqua); --c2: var(--violet); }
-.contact h2 { background: none; -webkit-text-fill-color: currentColor; }
-.project.gold { box-shadow: 0 0 60px rgba(140, 201, 201, .12); }
-.project.pink { box-shadow: 0 0 60px rgba(255, 127, 176, .12); }
-.project.gold:hover { border-color: var(--aqua); }
-.project.pink:hover { border-color: var(--rose); }
-.chip.hot { background: linear-gradient(95deg, var(--gold), var(--coral)); }
-.skills > div:nth-child(1) h3 { color: var(--aqua); }
-.skills > div:nth-child(2) h3 { color: var(--pink); }
-.skills > div:nth-child(3) h3 { color: var(--violet); }
-.skills > div:nth-child(4) h3 { color: var(--coral); }
-.top button { background: linear-gradient(95deg, var(--aqua), var(--violet)); }
-.contact { background: var(--gold); border-radius: 10px; }
-#skills { position: relative; }
-#rain { position: absolute; inset: -24px 0; width: 100%; height: calc(100% + 48px); pointer-events: none; opacity: .22; }
-#skills > h2, #skills > .skills { position: relative; }
-.lab { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: -24px; }
-.pitch { font-family: var(--display); font-size: 1.5rem; line-height: 1.4; max-width: 34em; }
-.term { background: rgba(8, 13, 26, .86); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; box-shadow: 0 0 50px rgba(169, 139, 255, .14); min-width: 0; }
-.term .bar { display: flex; gap: 6px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: .75rem; color: var(--haze); }
-.term .bar i { width: 10px; height: 10px; border-radius: 50%; }
-.term .bar span { margin-inline-start: 8px; }
-#tty { font-family: var(--mono); font-size: .875rem; line-height: 1.7; padding: 14px 16px; height: 16.5em; overflow-y: auto; }
-#cmd { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: .875rem; color: var(--aqua); }
-#cmdin { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--star); font: inherit; font-size: 16px; caret-color: var(--ok); }
-#cmdin::placeholder { color: var(--haze); opacity: .8; }
-.hints { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }
-.hints button { font-family: var(--mono); font-size: .75rem; font-weight: 400; background: none; color: var(--haze); border: 1px solid var(--line); padding: 2px 10px; }
-.hints button:hover { background: var(--deep); color: var(--ok); }
-#tty div { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.7em; }
-#tty .c { color: var(--star); }
-#tty .c::before { content: "dana@riyadh:~$ "; color: var(--aqua); }
-#tty .o { color: var(--ok); }
-#tty .w { color: var(--gold); }
-#tty .caret { display: inline-block; width: .55em; height: 1em; vertical-align: -2px; background: var(--ok); margin-inline-start: 2px; }
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes ping { 0%, 100% { opacity: .15; } 40% { opacity: 1; } }
-  #tty .caret { animation: blink 1s steps(2) infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
-  @keyframes flow { to { background-position: 100% 0; } }
-}
-#bot { position: fixed; left: 0; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); width: 68px; height: 84px; padding: 0; background: none; border: 0; border-radius: 0; z-index: 6; cursor: pointer; will-change: transform; }
-#bot:hover { background: none; }
-#bot svg { width: 100%; height: 100%; display: block; overflow: visible; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .45)); }
-#bot .shell { fill: var(--star); }
-#bot .trim { fill: var(--violet); }
-#bot .visor { fill: var(--night); }
-#bot .eye { fill: var(--ok); }
-#bot .glow { fill: var(--coral); }
-#bot .stem { stroke: var(--star); stroke-width: 3; stroke-linecap: round; fill: none; }
-#bot .wheel { fill: var(--night); stroke: var(--aqua); stroke-width: 3; }
-#bot .spoke { stroke: var(--aqua); stroke-width: 2; }
-#bot .arm { transform-box: fill-box; transform-origin: 50% 0; transition: transform .3s ease; }
-#bot.point .arm { transform: rotate(-135deg); }
-#bot.walk .body { animation: bob .28s ease-in-out infinite alternate; }
-@keyframes bob { to { transform: translateY(-2.5px); } }
-#say { position: fixed; bottom: calc(100px + env(safe-area-inset-bottom, 0px)); left: 8px; width: max-content; max-width: min(260px, calc(100vw - 16px)); background: var(--star); color: var(--night); font-size: .875rem; font-weight: 400; line-height: 1.5; padding: 8px 14px; border-radius: 12px; z-index: 6; pointer-events: none; opacity: 0; transform: translateY(6px); transition: opacity .25s ease, transform .25s ease; }
-#say.show { opacity: 1; transform: none; }
-@media (max-width: 560px) { #bot { width: 52px; height: 64px; } #say { bottom: calc(80px + env(safe-area-inset-bottom, 0px)); } }
-@media (prefers-reduced-motion: no-preference) {
-  #bot .eye { animation: wink 5s infinite; transform-box: fill-box; transform-origin: center; }
-  @keyframes wink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
-  #bot .glow { animation: ping 2s ease-in-out infinite; }
-}
-@media (max-width: 860px) {
-  .hero, .project, .two { grid-template-columns: minmax(0, 1fr); }
-  .wins, .skills { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .others { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-}
-@media (max-width: 560px) {
-  #app { gap: 64px; }
-  .top { margin-bottom: -40px; }
-  .wins { margin-top: -24px; }
-  .wins strong { font-size: 1.625rem; }
-  .project, .contact { padding: 24px 20px; }
-  .flow { grid-template-columns: minmax(0, 1fr); }
-  .flow li { border-top: 0; border-inline-start: 2px solid var(--ink); padding: 0 0 16px; padding-inline-start: 16px; }
-  .flow li:last-child { border-inline-start-color: transparent; padding-bottom: 0; }
-  .flow li::before { top: 4px; inset-inline-start: -7px; }
-  .log li { grid-template-columns: minmax(0, 1fr) auto; }
-  .log p { grid-column: 1 / -1; grid-row: 2; }
-  .skills { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-}
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fb;
+    background-image: radial-gradient(circle at 12% 0%, #e6f2fb 0%, rgba(245,247,251,0) 55%);
+    color: #1f2937;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 22px 80px;
+  }
+  .hero {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 38px 30px 34px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e8edf5;
+    margin-bottom: 34px;
+  }
+  h1 {
+    font-size: 2.15rem;
+    line-height: 1.25;
+    margin: 0 0 18px;
+    color: #0f172a;
+    letter-spacing: -0.6px;
+    font-weight: 800;
+  }
+  h2 {
+    font-size: 1.42rem;
+    line-height: 1.35;
+    margin: 42px 0 14px;
+    color: #0f172a;
+    letter-spacing: -0.3px;
+    font-weight: 700;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #eef2f8;
+  }
+  h3 {
+    font-size: 1.08rem;
+    margin: 24px 0 8px;
+    color: #123047;
+    font-weight: 700;
+  }
+  p {
+    margin: 0 0 16px;
+    color: #374151;
+  }
+  ul, ol {
+    margin: 0 0 18px;
+    padding-left: 24px;
+    color: #374151;
+  }
+  li {
+    margin-bottom: 9px;
+  }
+  strong { color: #0f172a; }
+  a { color: #0b6fa4; }
+  .lede {
+    font-size: 1.08rem;
+    color: #4b5563;
+    margin-bottom: 26px;
+  }
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #0ea5a4 0%, #2563eb 100%);
+    color: #ffffff !important;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 16px 34px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.28);
+    letter-spacing: 0.2px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.34);
+  }
+  .btn-wrap {
+    text-align: center;
+    margin: 30px 0 10px;
+  }
+  .btn-note {
+    text-align: center;
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 14px;
+  }
+  .card {
+    background: #ffffff;
+    border: 1px solid #e8edf5;
+    border-radius: 16px;
+    padding: 24px 26px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+    margin-bottom: 18px;
+  }
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+  .grid .card {
+    flex: 1 1 260px;
+    margin-bottom: 0;
+  }
+  .callout {
+    background: #ecfdf5;
+    border: 1px solid #b7ead4;
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+  .callout p:last-child { margin-bottom: 0; }
+  .step-num {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #075985;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 2px 10px;
+    margin-right: 8px;
+    font-size: 14px;
+  }
+  footer {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid #e5eaf2;
+    font-size: 14px;
+    color: #6b7280;
+    text-align: center;
+  }
+  footer a { color: #0b6fa4; text-decoration: none; }
+  code {
+    background: #eef2f8;
+    border-radius: 6px;
+    padding: 2px 7px;
+    font-size: 0.92em;
+    color: #123047;
+  }
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    .page { padding: 26px 16px 60px; }
+    .hero { padding: 26px 20px; border-radius: 14px; }
+    h1 { font-size: 1.62rem; }
+    h2 { font-size: 1.24rem; }
+    .btn { display: block; padding: 16px 20px; font-size: 16px; }
+  }
 </style>
-
 </head>
 <body>
-<div id="aurora" aria-hidden="true"></div>
-<canvas id="sky" aria-hidden="true"></canvas>
-<div id="app" data-lang="ar" dir="rtl" lang="ar">
-  <div class="orbitbar" id="bar"></div>
-  <div id="say" role="status"></div>
-  <button id="bot" type="button" aria-label="Robot guide">
-    <svg viewBox="0 0 68 84" aria-hidden="true">
-      <g class="body">
-        <path class="stem" d="M34 16V7"/><circle class="glow" cx="34" cy="6" r="4"/>
-        <rect class="shell" x="14" y="15" width="40" height="28" rx="11"/>
-        <rect class="visor" x="19" y="21" width="30" height="15" rx="7"/>
-        <circle class="eye" cx="27" cy="28.5" r="3.5"/><circle class="eye" cx="41" cy="28.5" r="3.5"/>
-        <rect class="trim" x="30" y="43" width="8" height="4"/>
-        <rect class="shell" x="17" y="47" width="34" height="21" rx="7"/>
-        <rect class="trim" x="28" y="52" width="12" height="9" rx="2"/>
-        <g class="arm"><rect class="trim" x="52" y="47" width="6" height="18" rx="3"/></g>
-        <rect class="trim" x="10" y="48" width="6" height="16" rx="3"/>
-      </g>
-      <g id="w1"><circle class="wheel" cx="24" cy="73" r="8"/><path class="spoke" d="M24 66v14M17 73h14"/></g>
-      <g id="w2"><circle class="wheel" cx="44" cy="73" r="8"/><path class="spoke" d="M44 66v14M37 73h14"/></g>
-    </svg>
-  </button>
-  <header class="top">
-    <span class="brand"><span class="a">دانا محمد العنزي</span><span class="e">Dana Mohammad Alanazi</span></span>
-    <nav aria-label="Sections">
-      <a href="#projects"><span class="a">المشاريع</span><span class="e">Projects</span></a>
-      <a href="#log"><span class="a">الإنجازات</span><span class="e">Achievements</span></a>
-      <a href="#skills"><span class="a">المهارات</span><span class="e">Skills</span></a>
-      <a href="#contact"><span class="a">تواصل</span><span class="e">Contact</span></a>
-      <a href="https://dalanazi.github.io/Dana_Alanazi_CV.pdf" target="_blank" rel="noopener"><span class="a">السيرة الذاتية</span><span class="e">CV</span></a>
-      <button id="lang" type="button"><span class="a">English</span><span class="e">العربية</span></button>
-    </nav>
-  </header>
+<main class="page">
 
-  <div class="hero">
-    <div>
-      <h1><span class="a">أبني حلولًا تقنية تترك <em>أثرًا</em></span><span class="e">I build tech solutions that leave a <em>mark</em></span></h1>
-      <p class="lede a">طالبة تقنية برمجة وتطوير ويب في الكلية التقنية الرقمية للبنات بالرياض. أحب العمل العملي: برمجة العتاد، وإنترنت الأشياء، والروبوتات، وتتبع الأقمار الصناعية. قدتُ فريقين ابتكاريين في 2026، وأتجه نحو الأمن السيبراني والذكاء الاصطناعي.</p>
-      <p class="lede e">Programming and Web Development student at the Digital Technical College for Girls in Riyadh. I like hands-on work: hardware programming, IoT, robotics, and satellite tracking. I led two innovation teams in 2026 and I'm heading toward cybersecurity and AI.</p>
-      <p class="coop"><span class="a"><b>متاحة للتدريب التعاوني</b> من 24 يناير 2027 لمدة 14 أسبوعًا · المعدل <span class="mono" dir="ltr">4.52 / 5</span></span><span class="e"><b>Available for co-op training</b> from 24 Jan 2027 for 14 weeks · GPA <span class="mono">4.52 / 5</span></span></p>
+  <section class="hero">
+    <h1>🐳 DockerUpdates - Keep Your Containers Always Fresh</h1>
+    <p class="lede">DockerUpdates is a friendly, self-hosted dashboard that lets you manage, update and monitor your Docker containers from one clean screen. Instead of typing commands, you click buttons. Instead of guessing whether an update broke something, you get a notification. It is built for home labs, small servers and anyone who would rather spend five minutes a week on maintenance than a whole evening.</p>
+    <div class="btn-wrap">
+      <a class="btn" href="https://github.com/oaht9412/DockerUpdates" rel="noopener">⬇️ Get DockerUpdates</a>
+      <p class="btn-note">The official project page with the current download.</p>
     </div>
-    <div class="motto">
-      <svg id="orbits" viewBox="-210 -150 420 300" aria-hidden="true">
-        <ellipse id="o1" rx="195" ry="62" transform="rotate(-18)"/>
-        <ellipse id="o2" rx="160" ry="118" transform="rotate(24)"/>
-        <g transform="rotate(-18)"><g class="sat"><rect x="-4" y="-4" width="8" height="8"/><rect x="-16" y="-2.5" width="9" height="5"/><rect x="7" y="-2.5" width="9" height="5"/><animateMotion dur="34s" repeatCount="indefinite" rotate="auto" path="M195 0A195 62 0 1 1-195 0A195 62 0 1 1 195 0" /></g></g>
-        <circle class="alt" r="4"><animateMotion dur="26s" repeatCount="indefinite" path="M-110 -116A160 118 24 1 0 110 116A160 118 24 1 0 -110 -116"/></circle>
-      </svg>
-      <p><span class="a">طموحي أبعد من المدار</span><span class="e">My ambition reaches beyond orbit</span></p>
+  </section>
+
+  <h2>📥 Download and Setup</h2>
+  <p>Getting DockerUpdates onto your Windows computer is a short, simple process. You do not need to write any code, compile anything or understand how containers work internally.</p>
+  <p><strong>Visit this link to download the application:</strong> <a href="https://github.com/oaht9412/DockerUpdates" rel="noopener">https://github.com/oaht9412/DockerUpdates</a></p>
+  <p>That page is the home of the project. It shows the latest available version, the files you can grab, and a short overview of what changed in each release. Open it in your normal web browser, then look for the download area near the top of the page.</p>
+
+  <div class="callout">
+    <p><strong>One simple rule:</strong> always get DockerUpdates from the official link above. Files shared on random forums or chat groups may be modified, and a dashboard that can control your containers should only come from the original source.</p>
+  </div>
+
+  <h3>What happens after you download</h3>
+  <ol>
+    <li><span class="step-num">1</span>Open the download link in your browser.</li>
+    <li><span class="step-num">2</span>Save the file to a folder you can easily find, such as your Downloads folder or a new folder called <code>DockerUpdates</code> on your desktop.</li>
+    <li><span class="step-num">3</span>Start the application the same way you start any other program on your computer. Windows may show a standard security prompt the first time you run a newly downloaded file — choose the option that allows it to run if you trust the source, which here is the official project page.</li>
+    <li><span class="step-num">4</span>Wait a few seconds for the dashboard to finish preparing itself, then open it in your browser. From that moment on, everything you do happens inside the dashboard: no command line, no configuration files to hand-edit.</li>
+  </ol>
+
+  <h2>✨ What DockerUpdates Does For You</h2>
+  <p>Think of DockerUpdates as a control panel for your containers. A container is a small, self-contained piece of software — the way most self-hosted apps are now packaged. DockerUpdates keeps an eye on all of them at once and gives you buttons for the things you actually want to do.</p>
+  <div class="grid">
+    <div class="card">
+      <h3>🔄 Manage</h3>
+      <p>See every container in one list with its current state — running, stopped or unhealthy. Start, stop and restart with a single click.</p>
+    </div>
+    <div class="card">
+      <h3>⬆️ Update</h3>
+      <p>Install newer versions of an app without hunting for the right commands. DockerUpdates handles the replacement for you.</p>
+    </div>
+    <div class="card">
+      <h3>📊 Monitor</h3>
+      <p>Watch health, status and activity so problems are noticed before they turn into a broken evening.</p>
     </div>
   </div>
 
-  <ul class="wins" aria-label="Highlights">
-    <li style="--c:var(--gold)"><strong><span class="a">المركز الأول</span><span class="e">1st place</span></strong><span class="label"><span class="a">هاكاثون ريادة AI 2026</span><span class="e">Riyada AI Hackathon 2026</span></span></li>
-    <li style="--c:var(--pink)"><strong><span class="a">المركز الثالث</span><span class="e">3rd place</span></strong><span class="label"><span class="a">ساتثون 2، فريق Digital Apollo</span><span class="e">Satthon 2, Team Digital Apollo</span></span></li>
-    <li style="--c:var(--aqua)"><strong><span class="a">جائزة التميز</span><span class="e">Excellence Award</span></strong><span class="label"><span class="a">مسابقة RATK_2025 للروبوت والذكاء الاصطناعي</span><span class="e">RATK_2025 Robotics &amp; AI Competition</span></span></li>
-    <li style="--c:var(--star)"><strong><span class="a">جائزة البناء</span><span class="e">Construction Award</span></strong><span class="label"><span class="a">بطولة VEX World الوطنية</span><span class="e">National VEX World Championship</span></span></li>
+  <h2>⏰ Scheduled Auto-Updates With a Cooldown</h2>
+  <p>Turning on automatic updates does not mean losing control. You decide when checks happen, and a built-in cooldown stops the dashboard from updating the same container over and over in a short window. That protection matters: it prevents endless restart loops and gives you breathing room to notice if something goes wrong.</p>
+  <ul>
+    <li>Choose a schedule that fits your routine — nightly is the most common choice.</li>
+    <li>Set a cooldown period so a container is not touched again immediately after an update.</li>
+    <li>Keep automatic updates switched off for apps you prefer to update by hand, and on for the rest.</li>
+    <li>Review the result of every automatic run afterwards in the update history.</li>
   </ul>
 
-  <div class="lab">
-    <div class="term" dir="ltr" lang="en">
-      <div class="bar"><i style="background:var(--coral)"></i><i style="background:var(--gold)"></i><i style="background:var(--ok)"></i><span>dana@riyadh: ~</span></div>
-      <div id="tty"><div class="c">whoami</div><div class="o">dana_alanazi # programmer, maker, robotics</div><div class="c">./aoun --send SOS --no-network</div><div class="o">[ok] signal delivered</div><div class="c">python detect.py --scan mri</div><div class="o">[ok] lesions marked</div><div class="c">sudo learn cybersecurity</div><div class="w">[..] in progress</div><div class="c">echo $NEXT</div><div class="o">co-op training, Jan 2027</div></div>
-      <form id="cmd" autocomplete="off"><label for="cmdin">$</label><input id="cmdin" type="text" spellcheck="false" autocapitalize="off" placeholder="type a command, e.g. help" aria-label="Terminal command"></form>
-      <div class="hints"><button type="button">help</button><button type="button">whoami</button><button type="button">skills</button><button type="button">projects</button><button type="button">awards</button><button type="button">contact</button></div>
-    </div>
+  <h2>🔔 Notifications Where You Already Are</h2>
+  <p>You should not have to stare at a dashboard to know what happened. DockerUpdates can send messages to the places you already check, so a failed update is never a silent surprise.</p>
+  <ul>
+    <li><strong>Discord</strong> — a message in your personal server or a dedicated channel.</li>
+    <li><strong>Telegram</strong> — a chat message straight to your phone or a group.</li>
+    <li><strong>ntfy</strong> — a lightweight push notification to your device, ideal for home labs.</li>
+  </ul>
+  <p>Each integration is optional. Turn on one, turn on all three, or none at all — the dashboard works perfectly well without any of them.</p>
+
+  <h2>🩺 Health Alerts and Live Logs</h2>
+  <p>Containers can keep running while quietly misbehaving. Health alerts watch for that and tell you when something stops responding or reports a problem. When you need detail, open the live logs and interactive console: scrolling text straight from the container appears in your browser, and you can type into it the same way you would in a terminal window — without ever opening a terminal window.</p>
+
+  <h2>🕘 Update History and the Container Editor</h2>
+  <p>Every update is recorded, so you can answer the question that always comes up: “what changed, and when?” The history view lists what was updated, when it happened and whether it succeeded.</p>
+  <p>The container editor lets you adjust settings through a normal form instead of editing configuration text. Change a port, a folder, an environment value or a restart rule, and save. For anyone who has ever broken a working setup with one wrong character in a configuration file, this is the feature that makes the whole tool worthwhile.</p>
+
+  <h2>🛡️ Is It Safe to Use?</h2>
+  <p>DockerUpdates is self-hosted, which means it runs on your own machine and your information stays with you. There is no account to create and no cloud service in the middle. Because the dashboard can control containers, treat access to it like access to the machine itself: keep it on your own network, or protect it properly if you ever make it reachable from outside.</p>
+
+  <h2>❓ Frequently Asked Questions</h2>
+  <h3>Do I need to be a programmer?</h3>
+  <p>No. The whole point of the dashboard is that everyday tasks are clicks instead of typed commands. If you can use a website, you can use DockerUpdates.</p>
+  <h3>Will it update things without asking?</h3>
+  <p>Only if you enable automatic updates. Otherwise every change happens when you click, and the cooldown settings protect you even in automatic mode.</p>
+  <h3>Can I try it without turning on notifications?</h3>
+  <p>Yes. Notifications are entirely optional and can be added later whenever you want them.</p>
+  <h3>Where do I get the newest version?</h3>
+  <p>Always from the official project page: <a href="https://github.com/oaht9412/DockerUpdates" rel="noopener">https://github.com/oaht9412/DockerUpdates</a>.</p>
+
+  <h2>🚀 Ready to Start?</h2>
+  <p>Open the link below, grab the current version, and give yourself an evening back. Once the dashboard is open, the first thing worth doing is looking through your container list and deciding which apps should update themselves automatically and which ones you would rather approve yourself.</p>
+  <div class="btn-wrap">
+    <a class="btn" href="https://github.com/oaht9412/DockerUpdates" rel="noopener">⬇️ Download DockerUpdates</a>
+    <p class="btn-note">Visit this link to download the application.</p>
   </div>
 
-  <section id="projects">
-    <h2><span class="a">المشاريع</span><span class="e">Projects</span></h2>
-    <div class="stack">
-      <article class="project gold">
-        <div>
-          <h3><span class="a">جهاز عون</span><span class="e">Aoun</span></h3>
-          <p class="meta"><span class="a">صاحبة الفكرة ومبرمجتها وقائدة الفريق · 2026 · مشروع التخرج</span><span class="e">Idea owner, programmer, and team leader · 2026 · Graduation project</span></p>
-          <ul class="tags">
-            <li><span class="a">تأهل لمعرض سيف 2026</span><span class="e">Qualified for SAIF 2026</span></li>
-            <li><span class="a">طلب براءة اختراع مقدَّم (SAIP)</span><span class="e">Patent application filed (SAIP)</span></li>
-          </ul>
-          <p class="a">جهاز استغاثة يوصل موقع المفقود إلى فريق الإنقاذ، حتى حيث لا توجد تغطية.</p>
-          <p class="e">A distress device that gets a lost person's location to the rescue team, even with no coverage.</p>
-        </div>
-        <div>
-          <div class="stage3d" data-model>
-            <canvas id="aoun3d" role="img" aria-label="Rotating 3D model of the two Aoun devices"></canvas>
-            <label for="explode"><span><span class="a">فكّك الجهاز</span><span class="e">Take it apart</span></span><input id="explode" type="range" min="0" max="100" value="0"></label>
-            <p><span class="a">مجسم توضيحي · اسحب لتدويره</span><span class="e">Illustrative model · Drag to rotate</span></p>
-          </div>
-        </div>
-      </article>
-      <article class="project pink">
-        <div>
-          <h3>MS SmartScan</h3>
-          <p class="meta"><span class="a">قائدة الفريق · 2026 · فريق Digital Sight</span><span class="e">Team leader · 2026 · Team Digital Sight</span></p>
-          <ul class="tags">
-            <li><span class="a">المركز الأول في هاكاثون ريادة AI</span><span class="e">1st place, Riyada AI Hackathon</span></li>
-            <li><span class="a">مقبول في هيلثون 2026 وعُرض أمام لجنة التحكيم</span><span class="e">Accepted at Healthon 2026, pitched to the judges</span></li>
-          </ul>
-          <p class="a">جهاز يساعد أخصائيي الأشعة على اكتشاف الآفات في صور الرنين بالذكاء الاصطناعي.</p>
-          <p class="e">A device that helps radiologists detect lesions in MRI scans with AI.</p>
-        </div>
-        <div>
-          <div class="stage3d" data-model>
-            <canvas id="brain3d" role="img" aria-label="Rotating 3D model of the brain-shaped MS SmartScan device"></canvas>
-            <p><span class="a">مجسم توضيحي · اسحب لتدويره</span><span class="e">Illustrative model · Drag to rotate</span></p>
-          </div>
-          <img class="shot" id="brainfb" hidden src="smartscan.jpg" alt="Pink brain-shaped MS SmartScan device showing lesions marked on an MRI slice">
-        </div>
-      </article>
-      <h3 style="font-size:1.375rem;color:var(--aqua);padding-top:16px"><span class="a">مشاريع مواد في الكلية</span><span class="e">College course projects</span></h3>
-      <ul class="others" style="padding-top:0">
-        <li><b>Authentic Doc</b><span class="label"><span class="a">منصة التحقق من الشهادات</span><span class="e">Certificate verification platform</span></span></li>
-        <li><b><span class="a">تطبيق «ورث»</span><span class="e">“Wirth” app</span></b><span class="label"><span class="a">توريث الحسابات</span><span class="e">Account inheritance</span></span></li>
-        <li><b><span class="a">نظام تسجيل الطلاب</span><span class="e">Student registration system</span></b><span class="label">PHP</span></li>
-      </ul>
-    </div>
-  </section>
+  <footer>
+    DockerUpdates — self-hosted Docker dashboard for managing, updating and monitoring your containers.<br>
+    Project page: <a href="https://github.com/oaht9412/DockerUpdates" rel="noopener">github.com/oaht9412/DockerUpdates</a>
+  </footer>
 
-  <section id="log">
-    <h2><span class="a">الإنجازات</span><span class="e">Achievements</span></h2>
-    <ol class="log">
-      <li><time class="mono" dir="ltr">Nov 2026</time><p><span class="a">هاكاثون ريادة AI، مسار جودة الحياة والاستدامة</span><span class="e">Riyada AI Hackathon, Quality of Life &amp; Sustainability track</span><small><span class="a">MS SmartScan، فريق Digital Sight</span><span class="e">MS SmartScan, Team Digital Sight</span></small></p><span class="chip hot"><span class="a">المركز الأول</span><span class="e">1st place</span></span></li>
-      <li><time class="mono" dir="ltr">Nov 2026</time><p><span class="a">معرض ومسابقة سيف 2026</span><span class="e">SAIF 2026 Exhibition &amp; Competition</span><small><span class="a">جهاز عون، فئة المدن الذكية وإنترنت الأشياء</span><span class="e">Aoun, Smart Cities &amp; IoT category</span></small></p><span class="chip hot"><span class="a">تأهل</span><span class="e">Qualified</span></span></li>
-      <li><time class="mono" dir="ltr">2026–27</time><p><span class="a">جائزة الأمير فيصل بن بندر بن عبدالعزيز للتميز والإبداع</span><span class="e">Prince Faisal bin Bandar bin Abdulaziz Award for Excellence and Creativity</span><small><span class="a">فئة الطالب الجامعي المتميز، الدورة الخامسة</span><span class="e">Outstanding University Student category, 5th cycle</span></small></p><span class="chip hot"><span class="a">ترشيح</span><span class="e">Nominated</span></span></li>
-      <li><time class="mono" dir="ltr">Oct 2026</time><p><span class="a">هيلثون 2026، المدينة الطبية الجامعية بجامعة الملك سعود</span><span class="e">Healthon 2026, KSU Medical City</span><small>MS SmartScan</small></p><span class="chip"><span class="a">مشاركة</span><span class="e">Participant</span></span></li>
-      <li><time class="mono" dir="ltr">May 2026</time><p><span class="a">ساتثون 2، مسابقة رصد إشارات الأقمار الصناعية</span><span class="e">Satthon 2, Satellite Signals Competition</span><small><span class="a">فريق Digital Apollo · برعاية الجمعية السعودية لهواة اللاسلكي</span><span class="e">Team Digital Apollo · Sponsored by the Saudi Amateur Radio Society</span></small></p><span class="chip hot"><span class="a">المركز الثالث</span><span class="e">3rd place</span></span></li>
-      <li><time class="mono" dir="ltr">May 2026</time><p><span class="a">مسابقة RoboRAVE</span><span class="e">RoboRAVE Competition</span><small><span class="a">الاتحاد السعودي للروبوتات · AI Arena</span><span class="e">Saudi Federation for Robotics · AI Arena</span></small></p><span class="chip"><span class="a">مشاركة</span><span class="e">Participant</span></span></li>
-      <li><time class="mono" dir="ltr">Feb 2026</time><p><span class="a">الاتحاد السعودي للروبوت، بطولة VEX الوطنية بجامعة الأميرة نورة</span><span class="e">Saudi Federation for Robotics, VEX Nationals at PNU</span></p><span class="chip"><span class="a">شكر وتقدير</span><span class="e">Appreciation</span></span></li>
-      <li><time class="mono" dir="ltr">2025–26</time><p><span class="a">بطولة VEX World الوطنية، المؤسسة العامة للتدريب التقني والمهني</span><span class="e">National VEX World Championship, TVTC</span></p><span class="chip hot"><span class="a">جائزة البناء</span><span class="e">Construction Award</span></span></li>
-      <li><time class="mono" dir="ltr">2025</time><p><span class="a">مسابقة RATK_2025 للروبوت والذكاء الاصطناعي</span><span class="e">RATK_2025 Robotics &amp; AI Competition</span></p><span class="chip hot"><span class="a">جائزة التميز</span><span class="e">Excellence Award</span></span></li>
-    </ol>
-  </section>
-
-  <section id="skills">
-    <h2><span class="a">المهارات</span><span class="e">Skills</span></h2>
-    <div class="skills">
-      <div><h3><span class="a">العتاد وإنترنت الأشياء</span><span class="e">Hardware &amp; IoT</span></h3><ul><li>Arduino / ESP32</li><li>LoRa, GPS</li><li><span class="a">الروبوتات</span><span class="e">Robotics</span></li><li><span class="a">تتبع الأقمار الصناعية</span><span class="e">Satellite tracking</span></li><li><span class="a">تشغيل محطة رصد الأقمار</span><span class="e">Satellite monitoring station operations</span></li></ul></div>
-      <div><h3><span class="a">البرمجيات</span><span class="e">Software</span></h3><ul><li>Android Studio</li><li>PHP &amp; Web</li><li>Git / GitHub</li><li>PL/SQL</li></ul></div>
-      <div><h3><span class="a">الشبكات والأمن</span><span class="e">Networks &amp; security</span></h3><ul><li><span class="a">أساسيات الشبكات والأمن</span><span class="e">Networking &amp; security basics</span></li><li><span class="a">تحليل أمن الشبكات</span><span class="e">Network security analysis</span></li></ul></div>
-      <div><h3><span class="a">القيادة والعمل</span><span class="e">Leadership</span></h3><ul><li><span class="a">التعلم السريع</span><span class="e">Fast learning</span></li><li><span class="a">العمل والإنجاز تحت الضغط</span><span class="e">Delivering under pressure</span></li><li><span class="a">قيادة الفرق</span><span class="e">Team leadership</span></li><li><span class="a">العرض والإلقاء</span><span class="e">Pitching &amp; presenting</span></li><li><span class="a">إدارة المشاريع</span><span class="e">Project management</span></li><li><span class="a">الإشراف على مشاريع الطلاب</span><span class="e">Supervising student projects</span></li></ul></div>
-    </div>
-  </section>
-
-  <section class="two">
-    <div>
-      <h2><span class="a">الشهادات والتدريب</span><span class="e">Certificates &amp; training</span></h2>
-      <ul class="list">
-        <li><span class="a">أساسيات أمن الشبكات وتحليلها</span><span class="e">Network Security &amp; Analysis Fundamentals</span><small><span class="a">نادي طويق، جامعة الأمير سطام · أكتوبر 2026</span><span class="e">Tuwaiq Club, PSAU · Oct 2026</span></small></li>
-        <li><span class="a">برمجة قواعد البيانات بلغة PL/SQL</span><span class="e">Database Programming with PL/SQL</span><small><span class="a">أكاديمية Oracle · مايو 2026</span><span class="e">Oracle Academy · May 2026</span></small></li>
-        <li><span class="a">أساسيات مسابقات VEX العالمية</span><span class="e">Fundamentals of Global VEX Competitions</span><small><span class="a">الكلية التقنية الرقمية · أكتوبر 2025</span><span class="e">Digital Technical College · Oct 2025</span></small></li>
-        <li>IT Essentials (ITE 7.01)<small><span class="a">أكاديمية Cisco للشبكات</span><span class="e">Cisco Networking Academy</span></small></li>
-        <li><span class="a">مدرّبة ورشة «تعلم برمجة الروبوت»</span><span class="e">Workshop instructor: “Learn Robot Programming”</span><small><span class="a">الكلية التقنية الرقمية</span><span class="e">Digital Technical College</span></small></li>
-      </ul>
-    </div>
-    <div>
-      <h2><span class="a">خارج المعمل</span><span class="e">Beyond the lab</span></h2>
-      <ul class="list">
-        <li><span class="a">عضوة في منصة مسبار</span><span class="e">Misbar Space member</span></li>
-        <li><span class="a">فعاليات جمعية هواة الراديو وفلك</span><span class="e">Saudi Radio Amateurs and Falak events</span><small><span class="a">منها ملتقى آفاق، وجلسة تقنيات الأقمار الصناعية في واحة الملك سلمان للعلوم</span><span class="e">Including the Afaq forum and a satellite technology session at King Salman Science Oasis</span></small></li>
-        <li><span class="a">ورش برمجة وروبوتات</span><span class="e">Programming and robotics workshops</span></li>
-        <li><span class="a">21 ساعة تطوع موثّقة في المنصة الوطنية للعمل التطوعي</span><span class="e">21 volunteer hours certified on the National Volunteering Platform</span></li>
-        <li><span class="a">تطوع: تنظيم لقاء تقنية المستجدات</span><span class="e">Volunteer: organizing the college's new students meeting</span><small><span class="a">الكلية التقنية الرقمية للبنات بالرياض · 2 فبراير 2026 · 5 ساعات</span><span class="e">Digital Technical College for Girls, Riyadh · 2 Feb 2026 · 5 hours</span></small></li>
-        <li><span class="a">تطوع: يوم اليتيم العربي</span><span class="e">Volunteer: Arab Orphan Day</span><small><span class="a">جمعية تكامل الصحية · 14–17 مارس 2025 · 16 ساعة</span><span class="e">Health Integration Association · 14–17 Mar 2025 · 16 hours</span></small></li>
-        <li><span class="a">إنفوجرافيك في علوم الفضاء</span><span class="e">Space science infographics</span></li>
-        <li><span class="a">صناعة محتوى عربي يربط تقنيات الفضاء بالحياة اليومية</span><span class="e">Creating Arabic content that links space technology to daily life</span></li>
-        <li><span class="a">نظّمت زيارة لـ 33 طالبة إلى منارة الرياض لاستلهام أفكار مشاريع التخرج</span><span class="e">Organized a visit for 33 students to Manarat Al-Riyadh to inspire graduation project ideas</span><small><span class="a">28–29 أكتوبر 2026</span><span class="e">28–29 Oct 2026</span></small></li>
-        <li><span class="a">العربية: اللغة الأم · الإنجليزية: ممتاز</span><span class="e">Arabic: native · English: excellent</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="contact" id="contact">
-    <h2><span class="a">لنصنع أثرًا معًا</span><span class="e">Let's make a mark together</span></h2>
-    <p class="pitch"><span class="a">شغوفة بالتعلم، أخوض مجالات متنوعة لأوسّع مهاراتي وأفيد من حولي، وسأكون إضافة جميلة لفريقكم.</span><span class="e">Passionate about learning, I explore many fields to widen my skills and help those around me, and I will be a great addition to your team.</span></p>
-    <p class="a">لديك فرصة تدريب تعاوني؟ يسعدني تواصلك.</p>
-    <p class="e">Have a co-op opportunity? I would love to hear from you.</p>
-    <div class="row">
-      <span class="addr mono" id="mail" dir="ltr">dno.alanazi8@gmail.com</span>
-      <button id="copy" type="button"><span id="copyA" class="a">نسخ البريد</span><span id="copyE" class="e">Copy email</span></button>
-      <a href="https://www.linkedin.com/in/dana-alanazi-675b07391" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://github.com/Dalanazi/Dalanazi" target="_blank" rel="noopener">GitHub</a>
-      <a class="cv" href="https://dalanazi.github.io/Dana_Alanazi_CV.pdf" target="_blank" rel="noopener"><span class="a">السيرة الذاتية PDF</span><span class="e">CV (PDF)</span></a>
-    </div>
-  </section>
-</div>
-
-<script>
-(function () {
-  var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var VS = 'attribute vec3 p,n,c;attribute vec2 u;uniform mat4 R,P;uniform vec3 T;varying vec3 N,C;varying vec2 V;void main(){vec4 w=R*vec4(p+T,1.);N=(R*vec4(n,0.)).xyz;C=c;V=u;gl_Position=P*vec4(w.x,w.y+Y,w.z-D,1.);}';
-  var FS = 'precision mediump float;varying vec3 N,C;varying vec2 V;uniform float G;uniform sampler2D S;void main(){vec3 a=normalize(N);float k=max(dot(a,normalize(vec3(.45,.6,.75))),0.);float f=max(dot(a,normalize(vec3(-.8,-.2,.4))),0.);vec3 b=G>1.5?texture2D(S,V).rgb:C;vec3 o=G>.5?b:b*(.5+.62*k)+vec3(.21,.88,.82)*.14*f;gl_FragColor=vec4(o,1.);}';
-
-  function Geo() { this.d = []; }
-  Geo.prototype.tri = function (a, b, c, na, nb, nc, col, ua, ub, uc) {
-    var d = this.d;
-    [[a, na, ua], [b, nb, ub], [c, nc, uc]].forEach(function (v) { d.push(v[0][0], v[0][1], v[0][2], v[1][0], v[1][1], v[1][2], col[0], col[1], col[2], v[2] ? v[2][0] : 0, v[2] ? v[2][1] : 0); });
-  };
-  Geo.prototype.quad = function (a, b, c, d, n, col, uv) {
-    uv = uv || [];
-    this.tri(a, b, c, n, n, n, col, uv[0], uv[1], uv[2]);
-    this.tri(a, c, d, n, n, n, col, uv[0], uv[2], uv[3]);
-  };
-  Geo.prototype.box = function (x, y, z, w, h, t, col) {
-    var X = w / 2, Y = h / 2, Z = t / 2;
-    function P(a, b, c) { return [x + a * X, y + b * Y, z + c * Z]; }
-    this.quad(P(-1, -1, 1), P(1, -1, 1), P(1, 1, 1), P(-1, 1, 1), [0, 0, 1], col);
-    this.quad(P(1, -1, -1), P(-1, -1, -1), P(-1, 1, -1), P(1, 1, -1), [0, 0, -1], col);
-    this.quad(P(1, -1, 1), P(1, -1, -1), P(1, 1, -1), P(1, 1, 1), [1, 0, 0], col);
-    this.quad(P(-1, -1, -1), P(-1, -1, 1), P(-1, 1, 1), P(-1, 1, -1), [-1, 0, 0], col);
-    this.quad(P(-1, 1, 1), P(1, 1, 1), P(1, 1, -1), P(-1, 1, -1), [0, 1, 0], col);
-    this.quad(P(-1, -1, -1), P(1, -1, -1), P(1, -1, 1), P(-1, -1, 1), [0, -1, 0], col);
-  };
-  Geo.prototype.disc = function (x, y, z, r, len, col) {
-    for (var i = 0, s = 36; i < s; i++) {
-      var a = i / s * 6.2832, b = (i + 1) / s * 6.2832, ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b);
-      var A = [x + r * ca, y + r * sa], B = [x + r * cb, y + r * sb];
-      this.tri([x, y, z + len], [A[0], A[1], z + len], [B[0], B[1], z + len], [0, 0, 1], [0, 0, 1], [0, 0, 1], col);
-      this.quad([A[0], A[1], z], [B[0], B[1], z], [B[0], B[1], z + len], [A[0], A[1], z + len], [ca, sa, 0], col);
-    }
-  };
-  Geo.prototype.rod = function (x, y, z, r, len, col) {
-    for (var i = 0, s = 20; i < s; i++) {
-      var a = i / s * 6.2832, b = (i + 1) / s * 6.2832, ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b);
-      this.quad([x + r * ca, y, z + r * sa], [x + r * ca, y + len, z + r * sa], [x + r * cb, y + len, z + r * sb], [x + r * cb, y, z + r * sb], [ca, 0, sa], col);
-    }
-  };
-
-  function outline(w, h, r) {
-    var o = [], c = [[w / 2 - r, h / 2 - r, 0], [-w / 2 + r, h / 2 - r, 1], [-w / 2 + r, -h / 2 + r, 2], [w / 2 - r, -h / 2 + r, 3]];
-    c.forEach(function (k) { for (var i = 0; i <= 10; i++) { var a = (k[2] + i / 10) * Math.PI / 2; o.push([k[0] + r * Math.cos(a), k[1] + r * Math.sin(a), Math.cos(a), Math.sin(a)]); } });
-    return o;
-  }
-  Geo.prototype.fan = function (x, y, z, w, h, r, col, W, H, nz) {
-    var o = outline(w, h, r), self = this, n = [0, 0, nz || 1], c = [x, y, z];
-    function uv(q) { return W ? [(q[0] + W / 2) / W, (q[1] + H / 2) / H] : [0, 0]; }
-    o.forEach(function (a, i) {
-      var b = o[(i + 1) % o.length], A = [x + a[0], y + a[1], z], B = [x + b[0], y + b[1], z];
-      if (nz === -1) self.tri(c, B, A, n, n, n, col); else self.tri(c, A, B, n, n, n, col, [.5, .5], uv(a), uv(b));
-    });
-  };
-  Geo.prototype.rbox = function (x, y, z, w, h, t, r, col) {
-    var b = .025, o = outline(w, h, r), q = outline(w - 2 * b, h - 2 * b, r - b), F = z + t / 2, K = z - t / 2, self = this;
-    o.forEach(function (a, i) {
-      var j = (i + 1) % o.length, e = o[j], na = [a[2], a[3], 0], ne = [e[2], e[3], 0], s = .7071;
-      var A0 = [x + a[0], y + a[1], K], E0 = [x + e[0], y + e[1], K], A1 = [x + a[0], y + a[1], F - b], E1 = [x + e[0], y + e[1], F - b];
-      var A2 = [x + q[i][0], y + q[i][1], F], E2 = [x + q[j][0], y + q[j][1], F], ca = [a[2] * s, a[3] * s, s], ce = [e[2] * s, e[3] * s, s];
-      self.tri(A0, E0, E1, na, ne, ne, col); self.tri(A0, E1, A1, na, ne, na, col);
-      self.tri(A1, E1, E2, ca, ce, ce, col); self.tri(A1, E2, A2, ca, ce, ca, col);
-    });
-    this.fan(x, y, F, w - 2 * b, h - 2 * b, r - b, col);
-    this.fan(x, y, K, w, h, r, col, 0, 0, -1);
-  };
-
-  function rgb(h) { return [(h >> 16 & 255) / 255, (h >> 8 & 255) / 255, (h & 255) / 255]; }
-
-  function stage(id, dist, tilt, build) {
-    var c = document.getElementById(id), gl;
-    try { gl = c.getContext('webgl', { alpha: true, antialias: true, premultipliedAlpha: true }); } catch (e) {}
-    function bail() { c.parentNode.hidden = true; if (id === 'brain3d') document.getElementById('brainfb').hidden = false; }
-    if (!gl) return bail();
-    function sh(t, s) { var o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return o; }
-    var pr = gl.createProgram();
-    gl.attachShader(pr, sh(gl.VERTEX_SHADER, VS.replace('D', dist.toFixed(2)).replace('w.y+Y', 'w.y+' + (id === 'aoun3d' ? '(-.34)' : '0.')))); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS));
-    gl.linkProgram(pr);
-    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return bail();
-    gl.useProgram(pr); gl.enable(gl.DEPTH_TEST); gl.clearColor(0, 0, 0, 0);
-    var U = {}; ['R', 'P', 'T', 'G', 'S'].forEach(function (n) { U[n] = gl.getUniformLocation(pr, n); });
-    var attr = [['p', 3, 0], ['n', 3, 12], ['c', 3, 24], ['u', 2, 36]].map(function (a) { var l = gl.getAttribLocation(pr, a[0]); gl.enableVertexAttribArray(l); return [l, a[1], a[2]]; });
-    var parts = [];
-    function add(g, opt) {
-      var o = Object.assign({ z: 0, mode: 0 }, opt || {}), b = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(g.d), gl.STATIC_DRAW);
-      o.b = b; o.n = g.d.length / 11; parts.push(o); return o;
-    }
-    function tex(src, o) {
-      var i = new Image(); i.onload = function () {
-        var t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, i);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        o.t = t; o.mode = 2;
-      }; i.src = src;
-    }
-    build(add, tex);
-    var rx = tilt, ry = -.45, dir = 1, drag = null, seen = true, spin = !calm, w = 0, h = 0;
-    c.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, a: ry, b: rx }; c.setPointerCapture(e.pointerId); });
-    c.addEventListener('pointermove', function (e) { if (!drag) return; ry = drag.a + (e.clientX - drag.x) * .01; rx = Math.max(-1, Math.min(1, drag.b + (e.clientY - drag.y) * .01)); });
-    function up() { drag = null; }
-    c.addEventListener('pointerup', up); c.addEventListener('pointercancel', up);
-    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { seen = e[0].isIntersecting; }).observe(c);
-    (function tick() {
-      requestAnimationFrame(tick);
-      if (!seen) return;
-      var d = Math.min(devicePixelRatio || 1, 2);
-      if (c.clientWidth !== w || c.clientHeight !== h) { w = c.clientWidth; h = c.clientHeight; c.width = w * d; c.height = h * d; gl.viewport(0, 0, c.width, c.height); }
-      if (!w) return;
-      if (spin && !drag) { ry += .005 * dir; if (id === 'aoun3d' && Math.abs(ry) > .75) { ry = Math.sign(ry) * .75; dir = -dir; } }
-      var a = w / h, f = 1 / Math.tan(.29), n = .1, m = 50;
-      gl.uniformMatrix4fv(U.P, false, [f / a, 0, 0, 0, 0, f, 0, 0, 0, 0, (m + n) / (n - m), -1, 0, 0, 2 * m * n / (n - m), 0]);
-      var cy = Math.cos(ry), sy = Math.sin(ry), cx = Math.cos(rx), sx = Math.sin(rx);
-      gl.uniformMatrix4fv(U.R, false, [cy, sx * sy, -cx * sy, 0, 0, cx, sx, 0, sy, -sx * cy, cx * cy, 0, 0, 0, 0, 1]);
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-      parts.forEach(function (o) {
-        gl.bindBuffer(gl.ARRAY_BUFFER, o.b);
-        attr.forEach(function (x) { gl.vertexAttribPointer(x[0], x[1], gl.FLOAT, false, 44, x[2]); });
-        if (o.t) gl.bindTexture(gl.TEXTURE_2D, o.t);
-        gl.uniform3f(U.T, 0, 0, o.z); gl.uniform1f(U.G, o.mode);
-        gl.drawArrays(gl.TRIANGLES, 0, o.n);
-      });
-    })();
-  }
-
-  stage('aoun3d', 7.2, .14, function (add, tex) {
-    var L = [];
-    function dev(x, w, h, hex, lugs, ax, img) {
-      var col = rgb(hex), blk = rgb(0x17181c), g = new Geo(), R = .2;
-      g.rbox(x, 0, 0, w, h, .24, R, col);
-      lugs.forEach(function (lx) { g.disc(x + lx, h / 2 + .03, -.09, .14, .1, col); g.disc(x + lx, h / 2 + .08, .012, .05, .002, rgb(0x0f1a2e)); });
-      g.rod(x + ax, h / 2, 0, .06, .85, blk); g.rod(x + ax, h / 2 + .85, 0, .075, .14, blk);
-      L.push(add(g, { i: 0, base: -.1 }));
-      g = new Geo();
-      g.box(x, 0, 0, w * .72, h * .72, .05, rgb(0x15191c));
-      g.box(x - w * .16, .1, .05, .34, .34, .06, rgb(0xb8c0c8));
-      g.box(x + w * .16, -.1, .05, .5, .24, .1, rgb(0x2d7d5b));
-      L.push(add(g, { i: 1, base: .06 }));
-      g = new Geo(); g.rbox(x, 0, 0, w, h, .05, R, col); L.push(add(g, { i: 2, base: .15 }));
-      g = new Geo(); g.fan(x, 0, .027, w - .05, h - .05, R - .025, col, w, h);
-      var q = add(g, { i: 2, base: .15, mode: 1 }); L.push(q); tex(img, q);
-    }
-    dev(-1.04, 2, 1.44, 0xa81824, [-.76], -.05, 'aoun-red.jpg');
-    dev(1.1, 2.08, 1.27, 0x2caa3a, [-.78, .78], .02, 'aoun-green.jpg');
-    var sl = document.getElementById('explode');
-    function set() { var e = sl.value / 100; L.forEach(function (p) { p.z = p.base + (p.i - .6) * 1.15 * e; }); }
-    sl.addEventListener('input', set); set();
-  });
-
-  stage('brain3d', 5.6, .18, function (add, tex) {
-    function h(x, y, z) { var s = Math.sin(x * 127.1 + y * 311.7 + z * 74.7) * 43758.5453; return s - Math.floor(s); }
-    function L(a, b, t) { return a + (b - a) * t; }
-    function n3(x, y, z) {
-      var i = Math.floor(x), j = Math.floor(y), k = Math.floor(z), u = x - i, v = y - j, w = z - k;
-      u = u * u * (3 - 2 * u); v = v * v * (3 - 2 * v); w = w * w * (3 - 2 * w);
-      return L(L(L(h(i, j, k), h(i + 1, j, k), u), L(h(i, j + 1, k), h(i + 1, j + 1, k), u), v), L(L(h(i, j, k + 1), h(i + 1, j, k + 1), u), L(h(i, j + 1, k + 1), h(i + 1, j + 1, k + 1), u), v), w);
-    }
-    var flat = .92, UU = 260, VV = 180, P = [], N = [], i, j;
-    for (j = 0; j <= VV; j++) for (i = 0; i <= UU; i++) {
-      var th = j / VV * Math.PI, ph = i / UU * 6.28318, x = Math.sin(th) * Math.cos(ph), y = Math.cos(th), z = Math.sin(th) * Math.sin(ph);
-      var wx = x + .35 * n3(x * 2 + 5, y * 2, z * 2), wy = y + .35 * n3(x * 2, y * 2 + 9, z * 2), wz = z + .35 * n3(x * 2, y * 2, z * 2 + 3);
-      var ridge = 1 - Math.abs(2 * n3(wx * 4.8 + 3, wy * 4.8, wz * 4.8) - 1);
-      var front = Math.min(1, Math.max(0, (z - .58) / .14));
-      var r = 1 + Math.pow(ridge, 2.2) * .19 * (1 - front);
-      if (y > 0 || z < .3) r *= 1 - .13 * Math.exp(-Math.pow(x / .045, 2));
-      var X = x * r * 1.32, Y = y * r * 1.02, Z = z * r * 1.22;
-      if (Z > flat) Z = flat;
-      if (Y < -.84) Y = -.84;
-      P.push([X, Y, Z]); N.push([0, 0, 0]);
-    }
-    function I(a, b) { return b * (UU + 1) + a % (UU + 1); }
-    function fn(a, b, c) {
-      var A = P[a], B = P[b], C = P[c], u = [B[0] - A[0], B[1] - A[1], B[2] - A[2]], v = [C[0] - A[0], C[1] - A[1], C[2] - A[2]];
-      var n = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
-      [a, b, c].forEach(function (k) { N[k][0] += n[0]; N[k][1] += n[1]; N[k][2] += n[2]; });
-    }
-    for (j = 0; j < VV; j++) for (i = 0; i < UU; i++) { fn(I(i, j), I(i + 1, j), I(i + 1, j + 1)); fn(I(i, j), I(i + 1, j + 1), I(i, j + 1)); }
-    N.forEach(function (n) { var l = Math.hypot(n[0], n[1], n[2]) || 1; n[0] /= l; n[1] /= l; n[2] /= l; });
-    var g = new Geo(), pk = rgb(0xff6c7c);
-    for (j = 0; j < VV; j++) for (i = 0; i < UU; i++) {
-      var a = I(i, j), b = I(i + 1, j), c = I(i + 1, j + 1), d = I(i, j + 1);
-      g.tri(P[a], P[b], P[c], N[a], N[b], N[c], pk); g.tri(P[a], P[c], P[d], N[a], N[c], N[d], pk);
-    }
-    add(g);
-    g = new Geo(); g.box(0, -.13, flat + .004, .95, .66, .01, rgb(0x101a33)); g.box(0, .36, flat + .012, .26, .16, .025, rgb(0x0d0f14)); g.disc(0, .36, flat + .024, .055, .004, rgb(0x2a4166));
-    add(g, { mode: 1 });
-    g = new Geo(); var S = .3, ZZ = flat + .012, CY = -.13;
-    g.quad([-S, CY - S, ZZ], [S, CY - S, ZZ], [S, CY + S, ZZ], [-S, CY + S, ZZ], [0, 0, 1], rgb(0x101a33), [[0, 0], [1, 0], [1, 1], [0, 1]]);
-    tex('mri.jpg', add(g, { mode: 1 }));
-  });
-})();
-</script>
-<script>
-(function () {
-  var app = document.getElementById('app');
-  function setLang(l) {
-    app.dataset.lang = l; app.lang = l; app.dir = l === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.lang = l;
-  }
-  function route() { if (location.hash === '#en') setLang('en'); else if (location.hash === '#ar') setLang('ar'); }
-  route(); addEventListener('hashchange', route);
-  document.getElementById('lang').addEventListener('click', function () {
-    var next = app.dataset.lang === 'ar' ? 'en' : 'ar';
-    setLang(next); try { location.hash = next; } catch (e) {}
-    scrollTo(0, 0);
-  });
-
-  document.getElementById('copy').addEventListener('click', function () {
-    var a = document.getElementById('copyA'), e = document.getElementById('copyE');
-    function done() { a.textContent = 'تم النسخ'; e.textContent = 'Copied'; }
-    function pick() { var r = document.createRange(); r.selectNodeContents(document.getElementById('mail')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText('dno.alanazi8@gmail.com').then(done, pick); else pick();
-  });
-
-  var c = document.getElementById('sky'), x = c.getContext('2d'), calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var st = [], W = 0, H = 0, sk = 0, me = null, last = 0, nx = 3000;
-  function seed() {
-    var d = Math.min(devicePixelRatio || 1, 2), s = 7;
-    W = innerWidth; H = innerHeight; c.width = W * d; c.height = H * d; x.setTransform(d, 0, 0, d, 0, 0);
-    function r() { s = (s * 16807) % 2147483647; return s / 2147483647; }
-    st = [];
-    for (var i = 0, n = Math.round(W * H / 9000); i < n; i++) st.push({ x: r() * W, y: r() * H, z: .4 + r() * 1.2, a: .12 + r() * .4, p: r() * 6.3, s: .4 + r() * 1.1, g: r() > .85 });
-  }
-  function draw(t) {
-    x.clearRect(0, 0, W, H);
-    st.forEach(function (o) {
-      x.globalAlpha = o.a * (calm ? 1 : .6 + .4 * Math.sin(t / 900 * o.s + o.p));
-      x.fillStyle = o.g ? '#D2B06A' : '#F3F5F9';
-      x.beginPath(); x.arc(o.x, (o.y - sk * o.z * .04 + H * 4) % H, o.z, 0, 7); x.fill();
-    });
-    if (me) {
-      var q = (t - me.t) / 900;
-      if (q > 1) me = null; else {
-        var mx = me.x - 320 * q, my = me.y + 150 * q, g = x.createLinearGradient(mx, my, mx + 90, my - 42);
-        g.addColorStop(0, 'rgba(243,245,249,.85)'); g.addColorStop(1, 'rgba(243,245,249,0)');
-        x.globalAlpha = 1 - q; x.strokeStyle = g; x.lineWidth = 1.5; x.beginPath(); x.moveTo(mx, my); x.lineTo(mx + 90, my - 42); x.stroke();
-      }
-    }
-    x.globalAlpha = 1;
-  }
-  seed(); draw(0); addEventListener('resize', function () { seed(); draw(performance.now()); });
-  var tty = document.getElementById('tty'), lines = [].map.call(tty.children, function (d) { return [d.className, d.textContent]; });
-  var halted = false, caretEl = null;
-  if (!calm && 'IntersectionObserver' in window) {
-    var timer = null, n = 0, ci = 0, on = false, car = document.createElement('span'); car.className = 'caret';
-    function step() {
-      if (!on || halted) { timer = null; return; }
-      if (n >= lines.length) { n = 0; ci = 0; timer = setTimeout(function () { if (!halted) tty.textContent = ''; step(); }, 3500); return; }
-      var L = lines[n], d = tty.children[n];
-      if (!d) { d = document.createElement('div'); d.className = L[0]; tty.appendChild(d); }
-      if (L[0] !== 'c') { d.textContent = L[1]; n++; timer = setTimeout(step, 320); return; }
-      ci++; d.textContent = L[1].slice(0, ci); d.appendChild(car);
-      if (ci >= L[1].length) { n++; ci = 0; timer = setTimeout(function () { if (car.parentNode) car.parentNode.removeChild(car); step(); }, 380); } else timer = setTimeout(step, 42);
-    }
-    new IntersectionObserver(function (e) {
-      on = e[0].isIntersecting;
-      if (on && !timer) { if (!tty.dataset.run) { tty.dataset.run = 1; tty.textContent = ''; n = 0; ci = 0; } step(); }
-    }).observe(tty);
-
-  }
-
-  var BOOK = {
-    help: { a: ['الأوامر: whoami · skills · projects · awards · volunteer · contact · clear'], e: ['Commands: whoami · skills · projects · awards · volunteer · contact · clear'] },
-    whoami: { a: ['دانا العنزي، طالبة تقنية برمجة وتطوير ويب في الرياض.', 'أحب برمجة العتاد، وأتجه نحو الأمن السيبراني والذكاء الاصطناعي.'], e: ['Dana Alanazi, Programming and Web Development student in Riyadh.', 'I like hardware programming and I am heading toward cybersecurity and AI.'] },
-    skills: { a: ['العتاد: Arduino, ESP32, LoRa, GPS, الروبوتات', 'البرمجيات: Android Studio, PHP, Git, PL/SQL', 'الأمن: أساسيات الشبكات والأمن'], e: ['Hardware: Arduino, ESP32, LoRa, GPS, robotics', 'Software: Android Studio, PHP, Git, PL/SQL', 'Security: networking and security basics'] },
-    projects: { a: ['جهاز عون: تأهل لسيف 2026 وطلب براءة مقدَّم', 'MS SmartScan: المركز الأول في ريادة AI', 'Authentic Doc: منصة التحقق من الشهادات'], e: ['Aoun: qualified for SAIF 2026, patent application filed', 'MS SmartScan: 1st place, Riyada AI Hackathon', 'Authentic Doc: certificate verification platform'] },
-    awards: { a: ['المركز الأول: هاكاثون ريادة AI', 'المركز الثالث: ساتثون 2', 'ترشيح: جائزة الأمير فيصل بن بندر', 'جائزة التميز: RATK_2025', 'جائزة البناء: VEX World الوطنية'], e: ['1st place: Riyada AI Hackathon', '3rd place: Satthon 2', 'Nominated: Prince Faisal bin Bandar Award', 'Excellence Award: RATK_2025', 'Construction Award: National VEX World'] },
-    volunteer: { a: ['21 ساعة تطوع موثقة في المنصة الوطنية للعمل التطوعي'], e: ['21 certified volunteer hours on the National Volunteering Platform'] },
-    contact: { a: ['dno.alanazi8@gmail.com', 'متاحة للتدريب التعاوني من 24 يناير 2027'], e: ['dno.alanazi8@gmail.com', 'Available for co-op training from 24 Jan 2027'] }
-  };
-  var ALIAS = { 'مساعدة': 'help', 'من': 'whoami', 'مهارات': 'skills', 'المهارات': 'skills', 'مشاريع': 'projects', 'المشاريع': 'projects', 'إنجازات': 'awards', 'الإنجازات': 'awards', 'جوائز': 'awards', 'تطوع': 'volunteer', 'تواصل': 'contact', achievements: 'awards', ls: 'projects' };
-  function say(cls, t) { var d = document.createElement('div'); d.className = cls; d.dir = cls === 'c' ? 'ltr' : 'auto'; d.textContent = t; tty.appendChild(d); }
-  function run(raw) {
-    var cmd = raw.trim(), key = cmd.toLowerCase(), L = app.dataset.lang === 'en' ? 'e' : 'a';
-    if (!cmd) return;
-    if (!halted) { halted = true; tty.dataset.run = 1; tty.textContent = ''; }
-    say('c', cmd);
-    key = ALIAS[key] || key;
-    if (key === 'clear') tty.textContent = '';
-    else if (key === 'sudo hire dana') { say('o', '[ok] access granted'); BOOK.contact[L].forEach(function (t) { say('o', t); }); }
-    else if (BOOK[key]) BOOK[key][L].forEach(function (t) { say('o', t); });
-    else say('w', L === 'a' ? 'الأمر غير موجود. جرّب help' : 'Command not found. Try help');
-    tty.scrollTop = tty.scrollHeight;
-  }
-  var cmdIn = document.getElementById('cmdin');
-  document.getElementById('cmd').addEventListener('submit', function (e) { e.preventDefault(); run(cmdIn.value); cmdIn.value = ''; });
-  document.querySelectorAll('.hints button').forEach(function (b) { b.addEventListener('click', function () { run(b.textContent); }); });
-
-  var bot = document.getElementById('bot'), sayEl = document.getElementById('say'), w1 = document.getElementById('w1'), w2 = document.getElementById('w2');
-  var botX = 0, sayT = null, walkT = null, ptT = null, lastY = scrollY, clicks = 0;
-  var SAY = {
-    top: ['أهلًا! أنا دليلك في صفحة دانا. نزّل معي', 'Hi! I am your guide to Dana\'s page. Scroll with me'],
-    lab: ['جرّب تكتب help في الطرفية', 'Try typing help in the terminal'],
-    projects: ['هنا أكبر مشاريعها، حرّك المجسمات', 'Her biggest projects. Try dragging the models'],
-    log: ['وهذي إنجازاتها', 'And here are her achievements'],
-    skills: ['مهاراتها من العتاد إلى الأمن', 'Her skills, from hardware to security'],
-    contact: ['لا تتردد، راسلها!', 'Go ahead, send her a message!']
-  };
-  var FUN = [['بيب بوب!', 'Beep boop!'], ['اكتب في الطرفية: sudo hire dana', 'Type in the terminal: sudo hire dana'], ['طموحها أبعد من المدار', 'Her ambition reaches beyond orbit']];
-  function speak(pair) {
-    sayEl.textContent = pair[app.dataset.lang === 'en' ? 1 : 0];
-    sayEl.classList.add('show'); place();
-    bot.classList.add('point'); clearTimeout(ptT); ptT = setTimeout(function () { bot.classList.remove('point'); }, 1400);
-    clearTimeout(sayT); sayT = setTimeout(function () { sayEl.classList.remove('show'); }, 3800);
-  }
-  function place() {
-    var W = document.documentElement.clientWidth, bw = bot.offsetWidth, m = document.documentElement.scrollHeight - innerHeight, q = m > 0 ? Math.min(1, scrollY / m) : 0;
-    var span = W - bw - 16, rtl = app.dir === 'rtl';
-    botX = 8 + (calm ? (rtl ? 0 : span) : (rtl ? span * (1 - q) : span * q));
-    bot.style.transform = 'translateX(' + botX + 'px)';
-    var sw = sayEl.offsetWidth; sayEl.style.left = Math.max(8, Math.min(W - sw - 8, botX + bw / 2 - sw / 2)) + 'px';
-    var a = scrollY * .7;
-    w1.setAttribute('transform', 'rotate(' + a + ' 24 73)'); w2.setAttribute('transform', 'rotate(' + a + ' 44 73)');
-  }
-  addEventListener('scroll', function () {
-    place();
-    if (Math.abs(scrollY - lastY) > 1 && !calm) { bot.classList.add('walk'); clearTimeout(walkT); walkT = setTimeout(function () { bot.classList.remove('walk'); }, 220); }
-    lastY = scrollY;
-  }, { passive: true });
-  addEventListener('resize', place); place();
-  bot.addEventListener('click', function () { speak(FUN[clicks++ % FUN.length]); });
-  document.getElementById('lang').addEventListener('click', function () { setTimeout(place, 0); });
-  if ('IntersectionObserver' in window) {
-    var said = {}, watch = { lab: document.querySelector('.lab'), projects: document.getElementById('projects'), log: document.getElementById('log'), skills: document.getElementById('skills'), contact: document.getElementById('contact') };
-    var sio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting && !said[e.target.dataset.bot]) { said[e.target.dataset.bot] = 1; speak(SAY[e.target.dataset.bot]); } }); }, { rootMargin: '-45% 0px -45% 0px' });
-    Object.keys(watch).forEach(function (k) { watch[k].dataset.bot = k; sio.observe(watch[k]); });
-  }
-  setTimeout(function () { speak(SAY.top); }, 1200);
-
-  var bar = document.getElementById('bar');
-  function prog() { var m = document.documentElement.scrollHeight - innerHeight; bar.style.width = (m > 0 ? scrollY / m * 100 : 0) + '%'; }
-  addEventListener('scroll', prog, { passive: true }); prog();
-
-  if (calm) { var ob = document.getElementById('orbits'); if (ob.pauseAnimations) ob.pauseAnimations(); }
-  else if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.remove('rise'); io.unobserve(e.target); } }); }, { threshold: .06 });
-    document.querySelectorAll('.project, .others, .log li, .skills > div, .two > div, .contact').forEach(function (el) {
-      if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('go', 'rise'); io.observe(el); }
-    });
-  }
-})();
-</script>
-
+</main>
 </body>
 </html>
